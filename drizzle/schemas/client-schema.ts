@@ -7,8 +7,8 @@ export const roleEnum = pgEnum('role', ['owner', 'admin', 'manager', 'staff', 'c
 export const client = pgTable("client", {
   id: text("id").notNull().unique(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone").notNull().unique(),
   role: roleEnum("role").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
