@@ -1,4 +1,6 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { appointment } from "./appointment-schema";
 
 export const roleEnum = pgEnum('role', ['owner', 'admin', 'manager', 'staff', 'client']);
 
@@ -13,4 +15,9 @@ export const client = pgTable("client", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-})
+});
+
+
+export const clientRelations = relations(client, ({many})=>({
+  appointments: many(appointment) 
+}))
