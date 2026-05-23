@@ -24,25 +24,26 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters.")
-    .max(10, "Username must be at most 10 characters.")
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Username can only contain letters, numbers, and underscores."
-    ),
+  userName: z.string().min(3, "Username must be at least 3 characters.").max(10, "Username must be at most 10 characters.").regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores."),
+  email: z.email().min(1, "Please enter your email."),
+  phone: z.string().min(10, "Phone must be at least 10 characters"),
+  password: z.string().min(8, "Password bust be at least 8 characters."),
+  rePassword: z.string().min(8, "Repeat your password.")
 })
 
 export default function SignupPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      userName: "",
+      email:"",
+      password:"",
+      phone:"",
+      rePassword:""
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
@@ -71,7 +72,7 @@ export default function SignupPage() {
         <form id="form-rhf-input" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
-              name="username"
+              name="userName"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -82,14 +83,97 @@ export default function SignupPage() {
                     {...field}
                     id="form-rhf-input-username"
                     aria-invalid={fieldState.invalid}
-                    placeholder="shadcn"
+                    placeholder="Jhon"
                     autoComplete="username"
                   />
-                  <FieldDescription>
-                    This is your public display name. Must be between 3 and 10
-                    characters. Must only contain letters, numbers, and
-                    underscores.
-                  </FieldDescription>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-rhf-input-username">
+                    Email
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-rhf-input-email"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="user@email.com"
+                    autoComplete="email"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="phone"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-rhf-input-username">
+                    Phone number
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-rhf-input-phone"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="0888 888 888"
+                    autoComplete="phone"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="password"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-rhf-input-username">
+                    Password
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-rhf-input-password"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Password"
+                    autoComplete="password"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="rePassword"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-rhf-input-username">
+                    Re-enter Password
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-rhf-input-rePassword"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Repeat Password"
+                    autoComplete="rePassword"
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -101,11 +185,11 @@ export default function SignupPage() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
+          <Button type="submit" form="form-rhf-input">
+            Signup
+          </Button>
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
-          </Button>
-          <Button type="submit" form="form-rhf-input">
-            Save
           </Button>
         </Field>
       </CardFooter>
