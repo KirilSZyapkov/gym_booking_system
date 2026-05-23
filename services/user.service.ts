@@ -1,5 +1,11 @@
 import { auth } from "@/lib/auth";
 
+type UserSchema= {
+  name: string,
+  email: string,
+  password: string
+}
+
 export async function createNewUserService(data: UserSchema) {
 
   const response = await auth.api.signUpEmail({
