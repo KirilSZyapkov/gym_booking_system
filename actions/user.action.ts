@@ -3,7 +3,6 @@
 import db from "@/drizzle/db";
 import { createNewUserService } from "@/services/user.service";
 import { createNewClientAction } from "./client.action";
-import { Client } from "@/drizzle/schemas/client-schema";
 
 type Params = {
   name: string,
