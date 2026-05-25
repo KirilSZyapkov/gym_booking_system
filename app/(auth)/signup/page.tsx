@@ -16,12 +16,15 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { createNewUserAction } from "@/actions/user.action";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   userName: z.string().min(3, "Username must be at least 3 characters.").max(10, "Username must be at most 10 characters.").regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores."),
@@ -32,24 +35,59 @@ const formSchema = z.object({
 })
 
 export default function SignupPage() {
+  const [isSignup, setIsSignup] = useState(false);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       userName: "",
-      email:"",
-      password:"",
-      phone:"",
-      rePassword:""
+      email: "",
+      password: "",
+      phone: "",
+      rePassword: ""
     },
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    setIsSignup(true);
+    if (data.password !== data.rePassword) {
+      setIsSignup(false);
+      return toast("Passwords do not match!", {
+        position: "bottom-right",
+        classNames: {
+          content: "flex flex-col gap-2",
+        },
+        style: {
+          "--border-radius": "calc(var(--radius)  + 4px)",
+        } as React.CSSProperties,
+      })
+    };
+
+    const rawData = {
+      name: data.userName,
+      email: data.email,
+      password: data.password,
+      phone: data.phone
+    }
+
+    const res = await createNewUserAction(rawData);
+
+    if ("error" in res) {
+      setIsSignup(false);
+      toast.error(res.error, {
+        position: "bottom-right",
+        classNames: {
+          content: "flex flex-col gap-2",
+        },
+        style: {
+          "--border-radius": "calc(var(--radius)  + 4px)",
+        } as React.CSSProperties,
+      });
+      return;
+    }
+
+    toast("Account created successfully!", {
       position: "bottom-right",
       classNames: {
         content: "flex flex-col gap-2",
@@ -57,7 +95,12 @@ export default function SignupPage() {
       style: {
         "--border-radius": "calc(var(--radius)  + 4px)",
       } as React.CSSProperties,
-    })
+    });
+
+    setIsSignup(false);
+    form.reset();
+    router.push("/");
+    router.refresh();
   }
 
   return (
@@ -107,6 +150,7 @@ export default function SignupPage() {
                     aria-invalid={fieldState.invalid}
                     placeholder="user@email.com"
                     autoComplete="email"
+                    type="email"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -151,6 +195,7 @@ export default function SignupPage() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Password"
                     autoComplete="password"
+                    type="password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -173,6 +218,7 @@ export default function SignupPage() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Repeat Password"
                     autoComplete="rePassword"
+                    type="password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -184,12 +230,19 @@ export default function SignupPage() {
         </form>
       </CardContent>
       <CardFooter>
-        <Field orientation="horizontal">
-          <Button type="submit" form="form-rhf-input">
-            Signup
-          </Button>
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Reset
+        <Field orientation="horizontal" className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Button type="submit" form="form-rhf-input" disabled={isSignup}>
+              {isSignup ? "Loading..." :"Signup"}
+            </Button>
+            <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSignup}>
+              Reset
+            </Button>
+          </div>
+          <Button variant="destructive" disabled={isSignup}>
+            <Link href="/">
+              Cancel
+            </Link>
           </Button>
         </Field>
       </CardFooter>

@@ -17,6 +17,8 @@ export const client = pgTable("client", {
     .notNull(),
 });
 
+export type Client = typeof client.$inferSelect;
+
 
 export const clientRelations = relations(client, ({many})=>({
   appointments: many(appointment) 
