@@ -23,25 +23,25 @@ export async function createNewUserAction(data: Params) {
   };
 
   try {
-    return await db.transaction(async (ctx) => {
-      const authUser = await createNewUserService(user);
 
-      if (!authUser.user) {
-        throw new Error("User creation failed!");
-      }
+    const authUser = await createNewUserService(user);
 
-      const client = {
-        id: authUser.user.id,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        role: "client" as const,
-      };
+    if (!authUser.user) {
+      throw new Error("User creation failed!");
+    };
 
-      const newClient = await createNewClientAction(client);
+    const client = {
+      id: authUser.user.id,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      role: "client" as const,
+    };
 
-      return newClient;
-    })
+    const newClient = await createNewClientAction(client);
+
+    return newClient;
+
   } catch (error: unknown) {
     return {
       success: false,
