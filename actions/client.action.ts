@@ -19,7 +19,7 @@ export async function createNewClientAction(data: Params) {
   } catch (error: unknown) {
     console.log(error);
     return {
-      success: "Faild",
+      success: false,
       message: "Faild to register new client!"
     }
   }

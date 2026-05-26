@@ -11,7 +11,14 @@ type Params = {
 
 export async function createNewClientService(data: Params) {
 
-  const [newClient] = await db.insert(client).values(data).returning();
+  const [newClient] = await db.insert(client).values(data).onConflictDoUpdate({
+    target: client.id,
+    set:{
+      email: data.email,
+      name: data.name,
+      phone: data.phone
+    }
+  }).returning();
 
   if(!newClient){
     throw new Error("CLIENT_CREATION_FAILED");

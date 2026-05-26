@@ -14,7 +14,7 @@ type Params = {
 
 
 
-export async function createNewUserAction(data: Params){
+export async function createNewUserAction(data: Params) {
 
   const user = {
     name: data.name,
@@ -25,6 +25,10 @@ export async function createNewUserAction(data: Params){
   try {
     return await db.transaction(async (ctx) => {
       const authUser = await createNewUserService(user);
+
+      if (!authUser.user) {
+        throw new Error("User creation failed!");
+      }
 
       const client = {
         id: authUser.user.id,
