@@ -26,4 +26,20 @@ export async function createNewClientService(data: Params) {
 
   return newClient;
   
+};
+
+export async function getClientByIdService(id:string) {
+ 
+  const clientData = await db.query.client.findFirst({
+    where: (client, {eq})=> eq(client.id, id),
+    with: {
+      appointments: true
+    }
+  });
+
+  if(!clientData){
+    throw new Error("CLIENT_NOT_FOUND");
+  };
+
+  return clientData;
 }

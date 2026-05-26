@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { useSession } from "@/lib/auth-client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -23,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { createNewUserAction } from "@/actions/user.action";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -51,6 +52,16 @@ const formSchema = z.object({
 export default function SignupPage() {
   const [isSignup, setIsSignup] = useState(false);
   const router = useRouter();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session?.data?.user) {
+      router.push("/");
+    }
+  }, [session, router]);
+
+
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,6 +73,14 @@ export default function SignupPage() {
       rePassword: "",
     },
   });
+
+  if (session?.isPending) {
+    return <div>Loading...</div>;
+  };
+
+  if (session?.data?.user) {
+    return null;
+  };
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSignup(true);
@@ -326,8 +345,8 @@ export default function SignupPage() {
                 variant="outline"
                 onClick={() => form.reset()}
                 disabled={isSignup}
-              className="h-11 w-full bg-white px-4 sm:w-auto"
-            >
+                className="h-11 w-full bg-white px-4 sm:w-auto"
+              >
                 Reset
               </Button>
             </div>

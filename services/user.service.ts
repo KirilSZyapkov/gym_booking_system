@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 type UserSchema= {
   name: string,
@@ -21,4 +22,19 @@ export async function createNewUserService(data: UserSchema) {
   };
 
   return response;
+};
+
+export async function loginUserService({email, password}: { email: string, password: string }) {
+  const response = await auth.api.signInEmail({
+    body: {email, password}
+  });
+
+  return response;
+}
+
+export async function logoutUserService() {
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+  return {success: true}
 }
