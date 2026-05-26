@@ -1,6 +1,6 @@
 "use server";
 
-import { createNewClientService } from "@/services/client.service";
+import { createNewClientService, getClientByIdService } from "@/services/client.service";
 
 type Params = {
   id: string
@@ -21,6 +21,21 @@ export async function createNewClientAction(data: Params) {
     return {
       success: false,
       message: "Faild to register new client!"
+    }
+  }
+};
+
+export async function getClientByIdAction(id: string) {
+  try {
+    const clientData = await getClientByIdService(id);
+
+    return clientData;
+
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Faild to find the client!"
     }
   }
 }
