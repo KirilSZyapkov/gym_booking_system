@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/drizzle/db";
-import { createNewUserService } from "@/services/user.service";
+import { createNewUserService, loginUserService } from "@/services/user.service";
 import { createNewClientAction } from "./client.action";
 import { eq } from "drizzle-orm";
 import { user } from "@/drizzle/schemas/auth-schema";
@@ -58,3 +58,14 @@ export async function createNewUserAction(data: Params) {
     };
   }
 };
+
+export async function loginUserAction({email, password}: {email: string, password: string}) {
+  try {
+    const user = await loginUserService({email, password});
+  } catch (error) {
+     return {
+      success: false,
+      error: "Can not login! Pliease try again later.",
+    };
+  }
+}
