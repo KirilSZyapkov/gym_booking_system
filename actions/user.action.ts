@@ -3,6 +3,8 @@
 import db from "@/drizzle/db";
 import { createNewUserService } from "@/services/user.service";
 import { createNewClientAction } from "./client.action";
+import { eq } from "drizzle-orm";
+import { user } from "@/drizzle/schemas/auth-schema";
 
 type Params = {
   name: string,
@@ -15,8 +17,9 @@ type Params = {
 
 
 export async function createNewUserAction(data: Params) {
+  let authUser: typeof user.$inferSelect | undefined = undefined;
 
-  const user = {
+  const userData = {
     name: data.name,
     email: data.email,
     password: data.password,
@@ -24,16 +27,22 @@ export async function createNewUserAction(data: Params) {
 
   try {
 
-    const authUser = await createNewUserService(user);
+    const existing = await db.query.user.findFirst({
+      where: eq(user.email, data.email)
+    })
 
-    if (!authUser.user) {
+    if (!existing) {
+      authUser = await createNewUserService(userData);
+    };
+
+    if (!authUser) {
       throw new Error("User creation failed!");
     };
 
     const client = {
-      id: authUser.user.id,
-      name: data.name,
-      email: data.email,
+      id: existing?.id ?? authUser.id,
+      name: existing?.name ?? data.name,
+      email: existing?.email ?? data.email,
       phone: data.phone,
       role: "client" as const,
     };

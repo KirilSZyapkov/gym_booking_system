@@ -21,7 +21,7 @@ export async function createNewUserService(data: UserSchema) {
     throw new Error("USER_CREATION_FAILED");
   };
 
-  return response;
+  return response.user;
 };
 
 export async function loginUserService({email, password}: { email: string, password: string }) {
