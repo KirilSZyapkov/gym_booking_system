@@ -31,6 +31,8 @@ import {
   CalendarCheck,
   Dumbbell,
   Loader2,
+  LockKeyhole,
+  Mail,
   ShieldCheck,
 } from "lucide-react";
 
@@ -99,6 +101,7 @@ export default function SigninPage() {
           "--border-radius": "calc(var(--radius)  + 4px)",
         } as React.CSSProperties,
       });
+      return;
     };
 
     toast("Login successfully.", {
@@ -118,74 +121,88 @@ export default function SigninPage() {
   }
 
   return (
-    <section className="grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <div className="hidden flex-col gap-8 lg:flex">
-        <div className="flex items-center gap-3">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-amber-900/10">
+    <section className="grid w-full max-w-5xl items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+      <div className="flex flex-col gap-5 lg:gap-8">
+        <Link
+          href="/"
+          className="flex w-fit items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-950 lg:hidden"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Home
+        </Link>
+
+        <div className="flex items-start gap-3">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-lg shadow-amber-900/10 sm:size-14">
             <Dumbbell className="size-6" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-sm font-medium text-amber-700">Gym Booking</p>
-            <h1 className="text-4xl font-semibold tracking-normal text-zinc-950">
-              Book your workouts without waiting around.
+            <p className="text-sm font-semibold uppercase text-amber-700">
+              Gym Booking
+            </p>
+            <h1 className="max-w-md text-3xl font-semibold leading-tight tracking-normal text-zinc-950 sm:text-4xl">
+              Welcome back to your training schedule.
             </h1>
+            <p className="mt-3 max-w-md text-base leading-7 text-zinc-600">
+              Sign in to reserve gym sessions, manage your profile, and keep
+              your next workout ready.
+            </p>
           </div>
         </div>
 
-        <div className="grid gap-3">
-          <div className="flex items-center gap-3 rounded-xl border border-amber-200/70 bg-white/70 p-4 shadow-sm backdrop-blur">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-800">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="flex items-center gap-3 rounded-xl border border-amber-200/70 bg-white/75 p-4 shadow-sm backdrop-blur">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-800">
               <CalendarCheck className="size-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="font-medium text-zinc-950">Fast booking</p>
+              <p className="font-medium text-zinc-950">Quick reservations</p>
               <p className="text-sm text-zinc-600">
-                Choose available time slots and trainers from your phone.
+                Pick available time slots from any device.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-zinc-200/80 bg-white/70 p-4 shadow-sm backdrop-blur">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-zinc-950 text-white">
+          <div className="flex items-center gap-3 rounded-xl border border-zinc-200/80 bg-white/75 p-4 shadow-sm backdrop-blur">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-zinc-950 text-white">
               <ShieldCheck className="size-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="font-medium text-zinc-950">Secure profile</p>
+              <p className="font-medium text-zinc-950">Secure access</p>
               <p className="text-sm text-zinc-600">
-                Keep your details ready for every future reservation.
+                Your account keeps bookings and details in one place.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <Card className="w-full border-amber-100/80 bg-white/90 shadow-2xl shadow-amber-950/10 backdrop-blur sm:max-w-2xl lg:justify-self-end">
-        <CardHeader className="gap-3 px-5 pt-5 sm:px-7 sm:pt-7">
+      <Card className="w-full border-amber-100/80 bg-white/95 shadow-2xl shadow-amber-950/10 backdrop-blur sm:max-w-xl lg:justify-self-end">
+        <CardHeader className="gap-4 px-5 pt-5 sm:px-7 sm:pt-7">
           <Link
             href="/"
-            className="mb-1 flex w-fit items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-950"
+            className="mb-1 hidden w-fit items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-950 lg:flex"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
             Home
           </Link>
           <div className="flex items-start gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white lg:hidden">
-              <Dumbbell className="size-5" aria-hidden="true" />
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-800">
+              <LockKeyhole className="size-5" aria-hidden="true" />
             </div>
             <div>
               <CardTitle className="text-2xl font-semibold tracking-normal text-zinc-950 sm:text-3xl">
-                Create an account
+                Sign in
               </CardTitle>
               <CardDescription className="mt-1 max-w-md text-pretty text-zinc-600">
-                Save your details and start booking workout sessions at the
-                gym.
+                Access your booking dashboard and continue planning your
+                workouts.
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="px-5 sm:px-7">
           <form id="form-rhf-input" onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup className="gap-4 sm:grid sm:grid-cols-2">
+            <FieldGroup className="gap-4">
 
               <Controller
                 name="email"
@@ -195,15 +212,21 @@ export default function SigninPage() {
                     <FieldLabel htmlFor="form-rhf-input-email">
                       Email
                     </FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-input-email"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="ivan@example.com"
-                      autoComplete="email"
-                      type="email"
-                      className="h-11 bg-white"
-                    />
+                    <div className="relative">
+                      <Mail
+                        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400"
+                        aria-hidden="true"
+                      />
+                      <Input
+                        {...field}
+                        id="form-rhf-input-email"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="name@example.com"
+                        autoComplete="email"
+                        type="email"
+                        className="h-12 bg-white pl-9"
+                      />
+                    </div>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -219,15 +242,21 @@ export default function SigninPage() {
                     <FieldLabel htmlFor="form-rhf-input-password">
                       Password
                     </FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-input-password"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="At least 8 characters"
-                      autoComplete="new-password"
-                      type="password"
-                      className="h-11 bg-white"
-                    />
+                    <div className="relative">
+                      <LockKeyhole
+                        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400"
+                        aria-hidden="true"
+                      />
+                      <Input
+                        {...field}
+                        id="form-rhf-input-password"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Enter your password"
+                        autoComplete="current-password"
+                        type="password"
+                        className="h-12 bg-white pl-9"
+                      />
+                    </div>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -238,8 +267,8 @@ export default function SigninPage() {
             </FieldGroup>
           </form>
         </CardContent>
-        <CardFooter className="border-amber-100/80 bg-amber-50/60 p-5 sm:p-7">
-          <Field className="gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <CardFooter className="border-amber-100/80 bg-amber-50/70 p-5 sm:p-7">
+          <Field className="gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center">
               <Link
                 href="/"
@@ -269,12 +298,12 @@ export default function SigninPage() {
               {isSigningin && (
                 <Loader2 className="size-4 animate-spin" aria-hidden="true" />
               )}
-              {isSigningin ? "Signing up..." : "Signup"}
+              {isSigningin ? "Signing in..." : "Sign in"}
             </Button>
           </Field>
         </CardFooter>
         <div className="border-t border-amber-100/80 px-5 py-4 text-center text-sm text-zinc-600 sm:px-7">
-          Don not have an accout?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
             className="font-medium text-zinc-950 underline-offset-4 hover:underline"

@@ -140,7 +140,7 @@ export default function SignupPage() {
     <section className="grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
       <div className="hidden flex-col gap-8 lg:flex">
         <div className="flex items-center gap-3">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-amber-900/10">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-lg shadow-amber-900/10 sm:size-14">
             <Dumbbell className="size-6" aria-hidden="true" />
           </div>
           <div>
