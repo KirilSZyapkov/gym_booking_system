@@ -42,7 +42,7 @@ const formSchema = z.object({
 });
 
 export default function SigninPage() {
-  const [isSignup, setIsSignup] = useState(false);
+  const [isSigningin, setIsSigningin] = useState(false);
   const router = useRouter();
   const session = useSession();
 
@@ -70,7 +70,7 @@ export default function SigninPage() {
   };
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsSignup(true);
+    setIsSigningin(true);
 
     const rawData = {
       password: data.password,
@@ -80,7 +80,7 @@ export default function SigninPage() {
     const res = await loginUserAction(rawData);
 
     if (!res) {
-      setIsSignup(false);
+      setIsSigningin(false);
       form.reset();
       router.push("/complete-account");
       router.refresh();
@@ -88,7 +88,7 @@ export default function SigninPage() {
     };
 
     if ("error" in res) {
-      setIsSignup(false);
+      setIsSigningin(false);
 
       toast("Failed to log in.", {
         position: "bottom-right",
@@ -111,7 +111,7 @@ export default function SigninPage() {
       } as React.CSSProperties,
     });
 
-    setIsSignup(false);
+    setIsSigningin(false);
     form.reset();
     router.push("/");
     router.refresh();
@@ -254,7 +254,7 @@ export default function SigninPage() {
                 type="button"
                 variant="outline"
                 onClick={() => form.reset()}
-                disabled={isSignup}
+                disabled={isSigningin}
                 className="h-11 w-full bg-white px-4 sm:w-auto"
               >
                 Reset
@@ -263,13 +263,13 @@ export default function SigninPage() {
             <Button
               type="submit"
               form="form-rhf-input"
-              disabled={isSignup}
+              disabled={isSigningin}
               className="h-11 w-full bg-zinc-950 px-6 text-white hover:bg-zinc-800 sm:w-auto"
             >
-              {isSignup && (
+              {isSigningin && (
                 <Loader2 className="size-4 animate-spin" aria-hidden="true" />
               )}
-              {isSignup ? "Signing up..." : "Signup"}
+              {isSigningin ? "Signing up..." : "Signup"}
             </Button>
           </Field>
         </CardFooter>
