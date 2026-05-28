@@ -5,6 +5,7 @@ import { createNewUserService, loginUserService } from "@/services/user.service"
 import { createNewClientAction } from "./client.action";
 import { eq } from "drizzle-orm";
 import { user } from "@/drizzle/schemas/auth-schema";
+import { client } from "@/drizzle/schemas/client-schema";
 
 type Params = {
   name: string,
@@ -12,8 +13,6 @@ type Params = {
   phone: string,
   password: string
 };
-
-
 
 
 export async function createNewUserAction(data: Params) {
@@ -62,10 +61,17 @@ export async function createNewUserAction(data: Params) {
 export async function loginUserAction({email, password}: {email: string, password: string}) {
   try {
     const user = await loginUserService({email, password});
+
+    const existing = await db.query.client.findFirst({
+      where: eq(client.email, user.user.email),
+    });
+
+    return existing;
+    
   } catch (error) {
      return {
       success: false,
-      error: "Can not login! Pliease try again later.",
+      error: "Can not login! Please try again later.",
     };
   }
 }
