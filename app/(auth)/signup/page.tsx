@@ -107,7 +107,6 @@ export default function SignupPage() {
     const res = await createNewUserAction(rawData);
 
     if ("error" in res) {
-      setIsSignup(false);
       toast.error(res.error, {
         position: "bottom-right",
         classNames: {
@@ -117,6 +116,9 @@ export default function SignupPage() {
           "--border-radius": "calc(var(--radius)  + 4px)",
         } as React.CSSProperties,
       });
+      setIsSignup(false);
+      form.reset();
+      router.push("/signin");
       return;
     }
 

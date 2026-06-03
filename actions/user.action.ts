@@ -53,7 +53,7 @@ export async function createNewUserAction(data: Params) {
   } catch (error: unknown) {
     return {
       success: false,
-      error: "Registration failed",
+      error: "An account with these credentials already exists. Please sign in.",
     };
   }
 };
