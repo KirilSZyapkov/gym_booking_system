@@ -1,6 +1,7 @@
 "use server";
 
-import { createNewClientService, getClientByIdService } from "@/services/client.service";
+import { client } from "@/drizzle/schema";
+import { createNewClientService, getClientByIdService, updateClientByIdService } from "@/services/client.service";
 
 type Params = {
   id: string
@@ -36,6 +37,21 @@ export async function getClientByIdAction(id: string) {
     return {
       success: false,
       message: "Faild to find the client!"
+    }
+  }
+};
+
+export async function updateClientByIdAction(id: string, data: Partial<typeof client.$inferSelect>) {
+  try {
+    const updatedClient = await updateClientByIdService(id, data);
+
+    return updatedClient;
+    
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Faild to update the client!"
     }
   }
 }
