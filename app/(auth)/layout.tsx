@@ -1,4 +1,18 @@
-export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+
+
+export default async function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if(session){
+    redirect("/");
+  };
+
   return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[linear-gradient(180deg,#fff8f1_0%,#fffdf9_55%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">
       <div className="absolute inset-x-0 top-0 -z-20 h-128 bg-[radial-gradient(circle_at_top_left,rgba(245,176,119,0.32),transparent_38%),radial-gradient(circle_at_top_right,rgba(255,230,206,0.92),transparent_34%)]" />
