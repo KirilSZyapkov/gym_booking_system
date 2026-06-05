@@ -31,3 +31,15 @@ export async function requireRole(roles: ("client" | "owner" | "admin" | "manage
 
   return userClient;
 }
+
+export async function checForkUser() {
+   const session = await auth.api.getSession({
+      headers: await headers()
+    });
+
+  if (!session?.user) {
+    return null;
+  };
+
+  return session.user;
+}
