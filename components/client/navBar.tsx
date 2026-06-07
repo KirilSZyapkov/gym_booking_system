@@ -1,15 +1,17 @@
-import LogoutButton from "../shared/logoutButton";
 import { checForkUser } from "@/lib/auth-guard";
 import { Dumbbell } from "lucide-react";
 import Link from "next/link";
 import NavLinks from "./navLinks";
+import NavUserSection from "./navUserSection";
 
 export default async function NavBar() {
-  const user = await checForkUser();
-  const displayName = user?.name || user?.email?.split("@")[0] || "Member";
+  const res = await checForkUser();
+  
+
+  // const displayName = user.name || user?.email?.split("@")[0] || "Member";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/75">
       <nav className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex min-h-11 items-center justify-between gap-3">
 
@@ -32,25 +34,7 @@ export default async function NavBar() {
 
           <span className="sm:block hidden "><NavLinks /></span>
 
-          <div className="flex shrink-0 items-center gap-2">
-            {user?.id ? (
-              <>
-                <Link href={`/profile/${user.id}`}>
-                  <span className="max-w-36 truncate rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground">
-                    {displayName}
-                  </span>
-                </Link>
-                <LogoutButton />
-              </>
-            ) : (
-              <Link
-                href="/signin"
-                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-              >
-                Sign in
-              </Link>
-            )}
-          </div>
+          <NavUserSection data={res}/>
         </div>
         <span className="xl:hidden block"><NavLinks /></span>
 

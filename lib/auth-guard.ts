@@ -2,16 +2,22 @@ import { auth } from "./auth";
 import { redirect } from "next/navigation";
 import { getClientByIdAction } from "@/actions/client.action";
 import { headers } from "next/headers";
+import { Client } from "@/drizzle/schemas/client-schema";
 
 export async function requireUser() {
   const session = await auth.api.getSession({
-      headers: await headers()
-    });
+    headers: await headers()
+  });
 
   if (!session?.user) {
     redirect("/signin");
   };
 
+  const profile = await getClientByIdAction(session.user.id);
+
+  if ("message" in profile) {
+    redirect("/complete-account");
+  }
   return session.user;
 }
 
@@ -32,14 +38,39 @@ export async function requireRole(roles: ("client" | "owner" | "admin" | "manage
   return userClient;
 }
 
-export async function checForkUser() {
-   const session = await auth.api.getSession({
-      headers: await headers()
-    });
+export type UserResult =
+  | {
+    success: true,
+    user: Client
+  }
+  | {
+    success: false,
+    message: string
+  }
 
-  if (!session?.user) {
-    return null;
+export async function checForkUser(): Promise<UserResult> {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (!session) {
+    return {
+      success: false,
+      message: "No user found"
+    };
   };
 
-  return session.user;
+  const profile = await getClientByIdAction(session.user.id);
+
+  if ("message" in profile) {
+    return {
+      success: false,
+      message: profile.message
+    }
+  };
+
+  return {
+    success: true,
+    user: profile
+  };
 }
