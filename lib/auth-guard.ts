@@ -42,7 +42,15 @@ export async function checForkUser() {
     return null;
   };
 
-  return session.user;
+ const clientRecord = await getClientByIdAction(session.user.id);
+
+  if("message" in clientRecord){
+    return {
+      message: "/complete-account"
+    }
+  }
+
+  return clientRecord;
 }
 
 export async function checkRegistration() {
