@@ -2,13 +2,12 @@ import { checForkUser } from "@/lib/auth-guard";
 import { Dumbbell } from "lucide-react";
 import Link from "next/link";
 import NavLinks from "./navLinks";
-import NavUserSection from "./navUserSection";
+import LogoutButton from "../shared/logoutButton";
+
 
 export default async function NavBar() {
-  const res = await checForkUser();
-  
-
-  // const displayName = user.name || user?.email?.split("@")[0] || "Member";
+  const user = await checForkUser();
+  const displayName = user?.name || user?.email?.split("@")[0] || "Member";
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/75">
@@ -34,7 +33,25 @@ export default async function NavBar() {
 
           <span className="sm:block hidden "><NavLinks /></span>
 
-          <NavUserSection data={res}/>
+          <div className="flex shrink-0 items-center gap-2">
+            {user ? (
+              <>
+                <Link href={`/profile/${user.id}`}>
+                  <span className="max-w-36 truncate rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground">
+                    {displayName}
+                  </span>
+                </Link>
+                <LogoutButton />
+              </>
+            ) : (
+              <Link
+                href="/signin"
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                Sign in
+              </Link>
+            )}
+          </div>
         </div>
         <span className="xl:hidden block"><NavLinks /></span>
 
