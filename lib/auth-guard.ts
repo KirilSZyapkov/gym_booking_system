@@ -62,3 +62,12 @@ export async function checkRegistration() {
   };
 
 }
+
+export async function test() {
+  const authUser = await requireUser();
+  const clientRecord = await getClientByIdAction(authUser.id);
+
+  if(!("message" in clientRecord)){
+    redirect("/");
+  }
+}
