@@ -80,6 +80,7 @@ export default function SigninPage() {
     };
 
     const res = await loginUserAction(rawData);
+    console.log(res);
 
     if (!res) {
       setIsSigningin(false);

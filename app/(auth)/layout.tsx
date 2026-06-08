@@ -1,17 +1,10 @@
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { checkRegistration } from "@/lib/auth-guard";
 
 
 export default async function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  });
-
-  if(session){
-    redirect("/");
-  };
+ 
+  await checkRegistration();
 
   return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[linear-gradient(180deg,#fff8f1_0%,#fffdf9_55%,#ffffff_100%)] px-4 py-10 sm:px-6 lg:px-8">

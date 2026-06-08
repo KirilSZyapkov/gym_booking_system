@@ -12,11 +12,6 @@ export async function requireUser() {
     redirect("/signin");
   };
 
-  const profile = await getClientByIdAction(session.user.id);
-
-  if ("message" in profile) {
-    redirect("/complete-account");
-  }
   return session.user;
 }
 
@@ -48,4 +43,22 @@ export async function checForkUser() {
   };
 
   return session.user;
+}
+
+export async function checkRegistration() {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (session) {
+    const client = await getClientByIdAction(session.user.id);
+
+    if (!client || "message" in client) {
+      console.log(client.message);
+      redirect("/complete-account");
+    }
+
+    redirect("/");
+  };
+
 }
