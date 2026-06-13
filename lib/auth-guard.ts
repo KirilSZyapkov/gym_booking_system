@@ -78,4 +78,6 @@ export async function test() {
   if(!("message" in clientRecord)){
     redirect("/");
   }
+
+  return authUser;
 }
