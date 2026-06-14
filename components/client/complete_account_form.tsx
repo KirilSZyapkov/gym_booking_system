@@ -68,12 +68,12 @@ export default function CompleteAccountForm({
     setIsCompleting(true);
 
     const res = await createNewClientAction({
-        id: authUser.id,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        role: "client",
-      });
+      id: authUser.id,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      role: "client",
+    });
 
     if ("message" in res) {
       toast.error(res.message, {
@@ -102,7 +102,7 @@ export default function CompleteAccountForm({
     setIsCompleting(false);
     form.reset();
     router.push("/");
-    router.refresh();
+    // router.refresh();
   }
 
   return (
