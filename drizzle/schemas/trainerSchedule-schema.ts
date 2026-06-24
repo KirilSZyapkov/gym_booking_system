@@ -3,7 +3,7 @@ import { trainer } from "./trainer-schema";
 
 export const trainerSchedule = pgTable("trainerSchedule", {
   id: uuid("id").defaultRandom().primaryKey(),
-  trainerId: uuid("trainerId").references(() => trainer.id).notNull(),
+  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull(),
   dayOfWeek: integer("dayOfWeek").notNull(),
   startTime: text("startTime").notNull(),
   endTime: text("endTime").notNull()

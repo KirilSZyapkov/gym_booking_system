@@ -15,7 +15,8 @@ export const appointmentStatusEnum = pgEnum('appointment_status', [
 export const appointment = pgTable('appointments', {
   id: uuid('id').defaultRandom().primaryKey(),
   clientId: text("clientId").references(() => client.id),
-  trainerId: uuid("trainerId").references(() => trainer.id).notNull(),
+  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull(),
+  dayOfWeek: text("dayOfWeek").notNull(),
   startTime: timestamp('start_time').notNull(),
   endTime: timestamp('end_time').notNull(),
   status: appointmentStatusEnum('status').default('confirmed'),
