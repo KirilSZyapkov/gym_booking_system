@@ -1,6 +1,7 @@
 import { pgTable, text, timestamp, pgEnum, uuid } from "drizzle-orm/pg-core";
 import { client } from "./client-schema";
 import { relations } from "drizzle-orm";
+import { trainer } from "./trainer-schema";
 
 export const appointmentStatusEnum = pgEnum('appointment_status', [
   // 'pending',
@@ -14,7 +15,7 @@ export const appointmentStatusEnum = pgEnum('appointment_status', [
 export const appointment = pgTable('appointments', {
   id: uuid('id').defaultRandom().primaryKey(),
   clientId: text("clientId").references(() => client.id),
-  trainer: text("trainer").notNull(),
+  trainerId: uuid("trainerId").references(() => trainer.id).notNull(),
   startTime: timestamp('start_time').notNull(),
   endTime: timestamp('end_time').notNull(),
   status: appointmentStatusEnum('status').default('confirmed'),
