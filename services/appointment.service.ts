@@ -13,6 +13,10 @@ export async function createNewAppointmentService(data: Params) {
 
 }
 
+export async function getAppointmentByTrainerIdService(trainerId: string) {
+  
+}
+
 export async function getAppointmentByIdService(id: string) {
   
 }
