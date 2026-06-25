@@ -20,6 +20,7 @@ export const appointment = pgTable('appointments', {
   startTime: timestamp('start_time').notNull(),
   endTime: timestamp('end_time').notNull(),
   status: appointmentStatusEnum('status').default('confirmed'),
+  sessionNote: text("sessionNote"),
   cancelledAt: timestamp('cancelled_at'),
   cancellationReason: text('cancellation_reason'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
