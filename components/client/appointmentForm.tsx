@@ -1,5 +1,18 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
+
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   Check,
   Activity,
@@ -23,6 +36,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { trainer } from "@/drizzle/schemas/trainer-schema";
 
 const sessionTypes = [
   {
@@ -51,7 +65,18 @@ const availableSlots = [
   { time: "18:30", trainer: "Chris Walker", spots: "Last spot" },
 ];
 
+
 export default function AppointmentForm() {
+  const [dayOfWeek, setDayOfWeek] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<string | null>(null);
+  const [endTime, setEndTime] = useState<string | null>(null);
+  const [listAllTrainers, setListAllTrainers] = useState<typeof trainer.$inferSelect[] | null>(null);
+  const [secetedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
+
+  async function createNewAppointment() {
+    alert("hi");
+  };
+
   return (
     <section className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1fr_22rem] lg:px-8">
       <div className="space-y-4">
@@ -186,6 +211,7 @@ export default function AppointmentForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+
             <div className="rounded-lg bg-white p-4 text-zinc-950">
               <div className="flex items-start gap-3">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-800">
@@ -231,10 +257,11 @@ export default function AppointmentForm() {
               </div>
             </div>
 
-            <Button className="h-11 w-full bg-white text-zinc-950 hover:bg-zinc-100">
+            <Button onClick={createNewAppointment} className="cursor-pointer h-11 w-full bg-white text-zinc-950 hover:bg-zinc-100">
               Reserve appointment
               <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
+
           </CardContent>
         </Card>
       </aside>
