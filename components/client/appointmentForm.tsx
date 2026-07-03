@@ -68,13 +68,14 @@ const availableSlots = [
 
 export default function AppointmentForm() {
   const [dayOfWeek, setDayOfWeek] = useState<string | null>(null);
-  const [startTime, setStartTime] = useState<string | null>(null);
-  const [endTime, setEndTime] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<string | null>("10");
+  const [endTime, setEndTime] = useState<string | null>("11");
   const [listAllTrainers, setListAllTrainers] = useState<typeof trainer.$inferSelect[] | null>(null);
   const [secetedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
+  const [notes, setNotes] = useState<string | null>(null);
 
   async function createNewAppointment() {
-    alert("hi");
+    alert(dayOfWeek);
   };
 
   return (
@@ -127,7 +128,7 @@ export default function AppointmentForm() {
                   id="appointment-date"
                   type="date"
                   className="h-11 bg-white"
-
+                  onChange={(e) => { setDayOfWeek(e.target.value) }}
                 />
               </div>
               <div className="space-y-2">
@@ -229,7 +230,7 @@ export default function AppointmentForm() {
             <div className="grid gap-3 text-sm">
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <Clock3 className="size-4 text-amber-300" aria-hidden="true" />
-                <span>Today, 07:30 - 08:30</span>
+                <span>{(dayOfWeek && startTime && endTime) ? (`${dayOfWeek} - ${startTime}: ${endTime}`) : ("--/--/-- - --:--")}</span>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <UserRound
