@@ -1,18 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
 
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
 import {
   Check,
   Activity,
@@ -37,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trainer } from "@/drizzle/schemas/trainer-schema";
+import { getAllTrainersAction } from "@/actions/trainer.action";
 
 const sessionTypes = [
   {
@@ -73,6 +63,25 @@ export default function AppointmentForm() {
   const [listAllTrainers, setListAllTrainers] = useState<typeof trainer.$inferSelect[] | null>(null);
   const [secetedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetch() {
+      const listTrainers = await getAllTrainersAction();
+
+      if("message" in listTrainers){
+        setError(listTrainers.message);
+        return;
+      };
+
+      setListAllTrainers(listTrainers);
+    };
+
+    fetch();
+  }, []);
+
+  console.log(listAllTrainers);
+  
 
   async function createNewAppointment() {
     alert(dayOfWeek);
@@ -230,7 +239,7 @@ export default function AppointmentForm() {
             <div className="grid gap-3 text-sm">
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <Clock3 className="size-4 text-amber-300" aria-hidden="true" />
-                <span>{(dayOfWeek && startTime && endTime) ? (`${dayOfWeek} - ${startTime}: ${endTime}`) : ("--/--/-- - --:--")}</span>
+                <span>{(dayOfWeek && startTime && endTime) ? (`${dayOfWeek} - ${startTime}:${endTime}`) : ("--/--/-- - --:--")}</span>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <UserRound
