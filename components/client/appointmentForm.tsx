@@ -61,7 +61,7 @@ export default function AppointmentForm() {
   const [startTime, setStartTime] = useState<string | null>("10");
   const [endTime, setEndTime] = useState<string | null>("11");
   const [listAllTrainers, setListAllTrainers] = useState<typeof trainer.$inferSelect[] | null>(null);
-  const [secetedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
+  const [selectedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,7 +69,7 @@ export default function AppointmentForm() {
     async function fetch() {
       const listTrainers = await getAllTrainersAction();
 
-      if("message" in listTrainers){
+      if ("message" in listTrainers) {
         setError(listTrainers.message);
         return;
       };
@@ -81,7 +81,8 @@ export default function AppointmentForm() {
   }, []);
 
   console.log(listAllTrainers);
-  
+  console.log(selectedTrainer);
+
 
   async function createNewAppointment() {
     alert(dayOfWeek);
@@ -147,10 +148,10 @@ export default function AppointmentForm() {
                   className="h-11 w-full rounded-lg border border-input bg-white px-3 text-base text-zinc-950 outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                   defaultValue="any"
                 >
-                  <option value="any">Any available trainer</option>
-                  <option value="alex">Alex Morgan</option>
-                  <option value="maya">Maya Stone</option>
-                  <option value="chris">Chris Walker</option>
+                  <option value="any" onClick={() => setListAllTrainers(null)}>Any available trainer</option>
+                  {listAllTrainers?.map(t => (
+                    <option value={t.name} onClick={() => setSelectedTrainer(t)}>{t.name}</option>
+                  ))}
                 </select>
               </div>
             </div>
