@@ -148,9 +148,9 @@ export default function AppointmentForm() {
                   className="h-11 w-full rounded-lg border border-input bg-white px-3 text-base text-zinc-950 outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                   defaultValue="any"
                 >
-                  <option value="any" onClick={() => setListAllTrainers(null)}>Any available trainer</option>
+                  <option value="any" onClick={() => setSelectedTrainer(null)}>Any available trainer</option>
                   {listAllTrainers?.map(t => (
-                    <option value={t.name} onClick={() => setSelectedTrainer(t)}>{t.name}</option>
+                    <option key={t.id} value={t.name} onClick={() => setSelectedTrainer(t)}>{t.name}</option>
                   ))}
                 </select>
               </div>
@@ -247,7 +247,7 @@ export default function AppointmentForm() {
                   className="size-4 text-amber-300"
                   aria-hidden="true"
                 />
-                <span>Alex Morgan</span>
+                <span>{selectedTrainer ? selectedTrainer.name : "----------"}</span>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <MapPin className="size-4 text-amber-300" aria-hidden="true" />
