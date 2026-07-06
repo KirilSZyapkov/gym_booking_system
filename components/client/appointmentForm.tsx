@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trainer } from "@/drizzle/schemas/trainer-schema";
-import { getAllTrainersAction } from "@/actions/trainer.action";
+import { getAllTrainersAction, getTrainerByIdAction } from "@/actions/trainer.action";
 
 const sessionTypes = [
   {
@@ -80,9 +80,21 @@ export default function AppointmentForm() {
     fetch();
   }, []);
 
+  
+
   console.log(listAllTrainers);
   console.log(selectedTrainer);
 
+  async function loadTrainer(id: string) {
+    const trainer = await getTrainerByIdAction(id);
+
+    if("message" in trainer){
+      setError(trainer.message);
+      return
+    };
+
+    setSelectedTrainer(trainer);
+  }
 
   async function createNewAppointment() {
     alert(dayOfWeek);
@@ -150,7 +162,7 @@ export default function AppointmentForm() {
                 >
                   <option value="any" onClick={() => setSelectedTrainer(null)}>Any available trainer</option>
                   {listAllTrainers?.map(t => (
-                    <option key={t.id} value={t.name} onClick={() => setSelectedTrainer(t)}>{t.name}</option>
+                    <option key={t.id} value={t.name} onClick={() => loadTrainer(t.id)}>{t.name}</option>
                   ))}
                 </select>
               </div>
@@ -158,11 +170,7 @@ export default function AppointmentForm() {
 
             <div className="mt-5 grid gap-3">
               {availableSlots.map((slot, index) => (
-                <button
-                  key={slot.time}
-                  type="button"
-                  className="flex items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-left transition-colors hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-zinc-400/40"
-                >
+                
                   <span
                     className={`flex size-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold ${index === 0
                       ? "bg-zinc-950 text-white"
@@ -171,25 +179,7 @@ export default function AppointmentForm() {
                   >
                     {slot.time}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-medium text-zinc-950">
-                      {slot.trainer}
-                    </span>
-                    <span className="block text-sm text-zinc-500">
-                      {slot.spots} available
-                    </span>
-                  </span>
-                  {index === 0 ? (
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
-                      <Check className="size-4" aria-hidden="true" />
-                    </span>
-                  ) : (
-                    <ArrowRight
-                      className="size-4 shrink-0 text-zinc-400"
-                      aria-hidden="true"
-                    />
-                  )}
-                </button>
+                
               ))}
             </div>
           </CardContent>

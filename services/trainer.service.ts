@@ -8,14 +8,14 @@ export async function getAllTrainersService(): Promise<Trainer[]> {
 };
 
 export async function getTrainerByIdService(id: string) {
-  const triner = await db.query.trainer.findFirst({
+  const trainer = await db.query.trainer.findFirst({
     where: (trainer, { eq }) => eq(trainer.id, id),
     with: {
       schedule: true
     }
   });
 
-  if (!triner) {
+  if (!trainer) {
     throw new Error("TRAINER_NOT_FOUND");
   };
 

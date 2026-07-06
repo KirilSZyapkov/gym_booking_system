@@ -4,7 +4,7 @@ import { relations } from "drizzle-orm";
 
 export const trainerSchedule = pgTable("trainerSchedule", {
   id: uuid("id").defaultRandom().primaryKey(),
-  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull(),
+  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull().unique(),
   dayOfWeek: integer("dayOfWeek").array().notNull(),
   startTime: text("startTime").notNull(),
   endTime: text("endTime").notNull()
