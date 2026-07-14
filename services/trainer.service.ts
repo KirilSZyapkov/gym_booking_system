@@ -21,3 +21,7 @@ export async function getTrainerByIdService(id: string) {
 
   return trainer;
 }
+
+export async function loadTrainerScheduleByIdAndDayOfWeekService(id: string, dayOfWeek: string) {
+  
+}

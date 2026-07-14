@@ -80,7 +80,7 @@ export default function AppointmentForm() {
     fetch();
   }, []);
 
-  
+
 
   console.log(listAllTrainers);
   console.log(selectedTrainer);
@@ -88,7 +88,7 @@ export default function AppointmentForm() {
   async function loadTrainer(id: string) {
     const trainer = await getTrainerByIdAction(id);
 
-    if("message" in trainer){
+    if ("message" in trainer) {
       setError(trainer.message);
       return
     };
@@ -168,18 +168,19 @@ export default function AppointmentForm() {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <div className="mt-5 grid grid-cols-5 gap-3">
               {availableSlots.map((slot, index) => (
-                
-                  <span
-                    className={`flex size-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold ${index === 0
-                      ? "bg-zinc-950 text-white"
-                      : "bg-white text-zinc-950 ring-1 ring-zinc-200"
-                      }`}
-                  >
-                    {slot.time}
-                  </span>
-                
+
+                <span
+                  key={index}
+                  className={`flex size-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold ${index === 0
+                    ? "bg-zinc-950 text-white"
+                    : "bg-white text-zinc-950 ring-1 ring-zinc-200"
+                    }`}
+                >
+                  {slot.time}
+                </span>
+
               ))}
             </div>
           </CardContent>
