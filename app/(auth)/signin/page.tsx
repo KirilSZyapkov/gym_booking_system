@@ -39,7 +39,7 @@ import {
 const formSchema = z.object({
 
   email: z.email().min(1, "Enter your email address."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
+  password: z.string().min(1, "Password is required!."),
 
 });
 

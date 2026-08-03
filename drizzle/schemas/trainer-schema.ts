@@ -2,7 +2,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { trainerSchedule } from "./trainerSchedule-schema";
 
-export const trainer = pgTable("trainers", {
+export const trainers = pgTable("trainers", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   phone: text("phone").notNull(),
@@ -13,11 +13,11 @@ export const trainer = pgTable("trainers", {
     .notNull(),
 });
 
-export type Trainer = typeof trainer.$inferSelect;
+export type Trainer = typeof trainers.$inferSelect;
 
-export const trinerRelations = relations(trainer, ({ one }) => ({
+export const trinerRelations = relations(trainers, ({ one }) => ({
   schedule: one(trainerSchedule, {
-    fields: [trainer.id],
+    fields: [trainers.id],
     references: [trainerSchedule.trainerId]
   })
 }))

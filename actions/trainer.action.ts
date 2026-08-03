@@ -1,6 +1,6 @@
 "use server";
 
-import { getAllTrainersService, getTrainerByIdService } from "@/services/trainer.service";
+import { getAllTrainersService, getTrainerByIdService, loadTrainerScheduleByIdAndDayOfWeekService } from "@/services/trainer.service";
 
 export async function getAllTrainersAction() {
   try {
@@ -29,4 +29,19 @@ export async function getTrainerByIdAction(id: string) {
       message: "Faild to load trainer!"
     }
   }
+}
+
+export async function loadTrainerScheduleByIdAndDayOfWeekAction(id: string, dayOfWeek: string) {
+  try {
+    const listTrainerSchedule = await loadTrainerScheduleByIdAndDayOfWeekService(id, dayOfWeek);
+
+    return listTrainerSchedule;
+  } catch (error: unknown) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Something went wrong!"
+    }
+  }
+  
 }

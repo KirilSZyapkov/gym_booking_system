@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
-import { appointment } from "./appointment-schema";
+import { appointments } from "./appointment-schema";
 
 export const roleEnum = pgEnum('role', ['owner', 'admin', 'manager', 'staff', 'client']);
 
@@ -21,5 +21,5 @@ export type Client = typeof client.$inferSelect;
 
 
 export const clientRelations = relations(client, ({many})=>({
-  appointments: many(appointment) 
+  appointments: many(appointments) 
 }))

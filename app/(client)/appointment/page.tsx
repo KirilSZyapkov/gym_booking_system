@@ -10,7 +10,7 @@ const bookingSteps = [
 ];
 
 export default async function NewAppointmentPage() {
-  await requireRole(["client", "admin", "staff"]);
+  await requireRole(["client", "admin", "staff","owner"]);
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-950">

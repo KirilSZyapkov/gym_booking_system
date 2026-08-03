@@ -1,18 +1,18 @@
 import { pgTable, uuid, integer, text } from "drizzle-orm/pg-core";
-import { trainer } from "./trainer-schema";
+import { trainers } from "./trainer-schema";
 import { relations } from "drizzle-orm";
 
 export const trainerSchedule = pgTable("trainerSchedule", {
   id: uuid("id").defaultRandom().primaryKey(),
-  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull().unique(),
+  trainerId: uuid("trainerId").references(() => trainers.id, { onDelete: "cascade" }).notNull().unique(),
   dayOfWeek: integer("dayOfWeek").array().notNull(),
   startTime: text("startTime").notNull(),
   endTime: text("endTime").notNull()
 });
 
 export const trainerScheduleRelations = relations(trainerSchedule, ({ one }) => ({
-  trainer: one(trainer, {
+  trainer: one(trainers, {
     fields: [trainerSchedule.trainerId],
-    references: [trainer.id]
+    references: [trainers.id]
   })
 }))

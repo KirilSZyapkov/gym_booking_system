@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, pgEnum, uuid } from "drizzle-orm/pg-core";
 import { client } from "./client-schema";
 import { relations } from "drizzle-orm";
-import { trainer } from "./trainer-schema";
+import { trainers } from "./trainer-schema";
 
 export const appointmentStatusEnum = pgEnum('appointment_status', [
   // 'pending',
@@ -12,10 +12,10 @@ export const appointmentStatusEnum = pgEnum('appointment_status', [
   'no_show'
 ]);
 
-export const appointment = pgTable('appointments', {
+export const appointments = pgTable('appointments', {
   id: uuid('id').defaultRandom().primaryKey(),
   clientId: text("clientId").references(() => client.id),
-  trainerId: uuid("trainerId").references(() => trainer.id, { onDelete: "cascade" }).notNull(),
+  trainerId: uuid("trainerId").references(() => trainers.id, { onDelete: "cascade" }).notNull(),
   dayOfWeek: text("dayOfWeek").notNull(),
   startTime: timestamp('start_time').notNull(),
   endTime: timestamp('end_time').notNull(),
@@ -27,9 +27,9 @@ export const appointment = pgTable('appointments', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const appointmentRelations = relations(appointment, ({ one }) => ({
+export const appointmentRelations = relations(appointments, ({ one }) => ({
   client: one(client, {
-    fields: [appointment.clientId],
+    fields: [appointments.clientId],
     references: [client.id]
   })
 }))

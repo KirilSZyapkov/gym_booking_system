@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { trainer } from "@/drizzle/schemas/trainer-schema";
-import { getAllTrainersAction, getTrainerByIdAction } from "@/actions/trainer.action";
+import { trainers } from "@/drizzle/schemas/trainer-schema";
+import { getAllTrainersAction, getTrainerByIdAction, loadTrainerScheduleByIdAndDayOfWeekAction } from "@/actions/trainer.action";
 
 const sessionTypes = [
   {
@@ -60,8 +60,8 @@ export default function AppointmentForm() {
   const [dayOfWeek, setDayOfWeek] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<string | null>("10");
   const [endTime, setEndTime] = useState<string | null>("11");
-  const [listAllTrainers, setListAllTrainers] = useState<typeof trainer.$inferSelect[] | null>(null);
-  const [selectedTrainer, setSelectedTrainer] = useState<typeof trainer.$inferSelect | null>(null);
+  const [listAllTrainers, setListAllTrainers] = useState<typeof trainers.$inferSelect[] | null>(null);
+  const [selectedTrainer, setSelectedTrainer] = useState<typeof trainers.$inferSelect | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,7 +87,11 @@ export default function AppointmentForm() {
 
   async function loadTrainer(id: string) {
     const trainer = await getTrainerByIdAction(id);
-
+    try {
+      await loadTrainerScheduleByIdAndDayOfWeekAction(id, "5");
+    } catch (err) {
+      console.error(err);
+    }
     if ("message" in trainer) {
       setError(trainer.message);
       return
