@@ -64,6 +64,7 @@ export default function AppointmentForm() {
   const [selectedTrainer, setSelectedTrainer] = useState<typeof trainers.$inferSelect | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [listFreeHours, setListFreeHours] = useState<string[] | []>([]);
 
   useEffect(() => {
     async function fetch() {
@@ -88,7 +89,12 @@ export default function AppointmentForm() {
   async function loadTrainer(id: string) {
     const trainer = await getTrainerByIdAction(id);
     try {
-      await loadTrainerScheduleByIdAndDayOfWeekAction(id, "5");
+      const list = await loadTrainerScheduleByIdAndDayOfWeekAction(id, "5");
+      if("message" in list){
+        setError(list.message);
+        return;
+      }; 
+      setListFreeHours(list)
     } catch (err) {
       console.error(err);
     }
@@ -149,6 +155,19 @@ export default function AppointmentForm() {
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
+                <Label htmlFor="trainer">Trainer</Label>
+                <select
+                  id="trainer"
+                  className="h-11 w-full rounded-lg border border-input bg-white px-3 text-base text-zinc-950 outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                  defaultValue="any"
+                >
+                  <option value="any" onClick={() => {setSelectedTrainer(null); setListFreeHours([])}}>Any available trainer</option>
+                  {listAllTrainers?.map(t => (
+                    <option key={t.id} value={t.name} onClick={() => loadTrainer(t.id)}>{t.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="appointment-date">Date</Label>
                 <Input
                   id="appointment-date"
@@ -157,32 +176,17 @@ export default function AppointmentForm() {
                   onChange={(e) => { setDayOfWeek(e.target.value) }}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="trainer">Trainer</Label>
-                <select
-                  id="trainer"
-                  className="h-11 w-full rounded-lg border border-input bg-white px-3 text-base text-zinc-950 outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
-                  defaultValue="any"
-                >
-                  <option value="any" onClick={() => setSelectedTrainer(null)}>Any available trainer</option>
-                  {listAllTrainers?.map(t => (
-                    <option key={t.id} value={t.name} onClick={() => loadTrainer(t.id)}>{t.name}</option>
-                  ))}
-                </select>
-              </div>
+              
             </div>
 
-            <div className="mt-5 grid grid-cols-5 gap-3">
-              {availableSlots.map((slot, index) => (
+            <div className="my-5 grid grid-cols-5 gap-3">
+              {listFreeHours && listFreeHours.map((slot, index) => (
 
                 <span
                   key={index}
-                  className={`flex size-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold ${index === 0
-                    ? "bg-zinc-950 text-white"
-                    : "bg-white text-zinc-950 ring-1 ring-zinc-200"
-                    }`}
+                  className={`flex size-12 shrink-0 border-2 items-center justify-center rounded-lg text-sm font-semibold bg-white text-zinc-950 cursor-pointer hover:bg-zinc-950 hover:text-white`}
                 >
-                  {slot.time}
+                  {slot}
                 </span>
 
               ))}

@@ -55,5 +55,6 @@ export async function loadTrainerScheduleByIdAndDayOfWeekService(id: string, day
     const starthour = a.startTime.toString()
   });
 
-  return listOfAppointments;
+  // return listOfAppointments.length > 0 ? listOfAppointments : hours;
+  return hours;
 }
