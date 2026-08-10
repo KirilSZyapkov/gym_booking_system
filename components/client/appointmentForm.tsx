@@ -58,8 +58,8 @@ const availableSlots = [
 
 export default function AppointmentForm() {
   const [dayOfWeek, setDayOfWeek] = useState<string | null>(null);
-  const [startTime, setStartTime] = useState<string | null>("10");
-  const [endTime, setEndTime] = useState<string | null>("11");
+  const [startTime, setStartTime] = useState<string | null>(null);
+  const [endTime, setEndTime] = useState<string | null>(null);
   const [listAllTrainers, setListAllTrainers] = useState<typeof trainers.$inferSelect[] | null>(null);
   const [selectedTrainer, setSelectedTrainer] = useState<typeof trainers.$inferSelect | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
@@ -90,10 +90,10 @@ export default function AppointmentForm() {
     const trainer = await getTrainerByIdAction(id);
     try {
       const list = await loadTrainerScheduleByIdAndDayOfWeekAction(id, "5");
-      if("message" in list){
+      if ("message" in list) {
         setError(list.message);
         return;
-      }; 
+      };
       setListFreeHours(list)
     } catch (err) {
       console.error(err);
@@ -161,22 +161,24 @@ export default function AppointmentForm() {
                   className="h-11 w-full rounded-lg border border-input bg-white px-3 text-base text-zinc-950 outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                   defaultValue="any"
                 >
-                  <option value="any" onClick={() => {setSelectedTrainer(null); setListFreeHours([])}}>Any available trainer</option>
+                  <option value="any" onClick={() => { setSelectedTrainer(null); setListFreeHours([]) }}>Any available trainer</option>
                   {listAllTrainers?.map(t => (
                     <option key={t.id} value={t.name} onClick={() => loadTrainer(t.id)}>{t.name}</option>
                   ))}
                 </select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="appointment-date">Date</Label>
+
+                <Label htmlFor="appointment-date">Date <span className="text-red-500 font-bold text-xs">{error}</span></Label>
+
                 <Input
                   id="appointment-date"
                   type="date"
                   className="h-11 bg-white"
-                  onChange={(e) => { setDayOfWeek(e.target.value) }}
+                  onChange={(e) => { setDayOfWeek(e.target.value); setError(null) }}
                 />
               </div>
-              
+
             </div>
 
             <div className="my-5 grid grid-cols-5 gap-3">
@@ -185,6 +187,16 @@ export default function AppointmentForm() {
                 <span
                   key={index}
                   className={`flex size-12 shrink-0 border-2 items-center justify-center rounded-lg text-sm font-semibold bg-white text-zinc-950 cursor-pointer hover:bg-zinc-950 hover:text-white`}
+                  onClick={() => {
+                    if (!dayOfWeek) {
+                      setError("Select day of the week!");
+                      return;
+                    }
+                    const startHour = slot.split(":")[0];
+                    const endHour = Number(startHour) + 1;
+                    setStartTime(startHour);
+                    setEndTime(endHour.toString());
+                  }}
                 >
                   {slot}
                 </span>
@@ -239,7 +251,7 @@ export default function AppointmentForm() {
             <div className="grid gap-3 text-sm">
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <Clock3 className="size-4 text-amber-300" aria-hidden="true" />
-                <span>{(dayOfWeek && startTime && endTime) ? (`${dayOfWeek} - ${startTime}:${endTime}`) : ("--/--/-- - --:--")}</span>
+                <span>{(dayOfWeek && startTime && endTime) ? (`${dayOfWeek} - From ${startTime} to ${endTime} o'clock`) : ("--/--/-- - --:--")}</span>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
                 <UserRound

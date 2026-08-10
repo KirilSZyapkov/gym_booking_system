@@ -1,16 +1,23 @@
 import db from "@/drizzle/db";
-import { appointment } from "@/drizzle/schemas/appointment-schema";
+import { appointments } from "@/drizzle/schemas/appointment-schema";
 import { eq } from "drizzle-orm";
 
 type Params = {
   clientId: string,
-  trainer: string,
+  trainerId: string,
+  dayOfWeek: string,
   startTime: Date,
   endTime: Date,
 }
 
 export async function createNewAppointmentService(data: Params) {
+const [newAppointment] = await db.insert(appointments).values(data).returning();
 
+if(!newAppointment){
+  throw new Error("APPOINTMENT_CREATION_FAILD");
+};
+
+return newAppointment;
 }
 
 export async function getAppointmentByTrainerIdService(trainerId: string) {
@@ -25,7 +32,7 @@ export async function getAllAppointmentsService() {
   
 }
 
-export async function updateAppointmentService(id: string, data: Partial<typeof appointment.$inferSelect>) {
+export async function updateAppointmentService(id: string, data: Partial<typeof appointments.$inferSelect>) {
   
 }
 
