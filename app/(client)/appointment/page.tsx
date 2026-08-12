@@ -12,8 +12,6 @@ const bookingSteps = [
 export default async function NewAppointmentPage() {
   const logedInUser = await requireRole(["client", "admin", "staff","owner"]);
 
-  console.log("new appitment page",logedInUser);
-
   if(!logedInUser){
     return <div>Loading...</div>;
   }
