@@ -9,5 +9,16 @@ type Params = {
 };
 
 export async function createNewAppointmentAction(data: Params) {
+  try {
+    const newAppointment = await createNewAppointmentService(data);
 
+    return newAppointment;
+    
+  } catch (error: unknown) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Faild to book appointment!"
+    }
+  }
 }

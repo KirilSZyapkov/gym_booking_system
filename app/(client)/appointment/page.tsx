@@ -10,7 +10,13 @@ const bookingSteps = [
 ];
 
 export default async function NewAppointmentPage() {
-  await requireRole(["client", "admin", "staff","owner"]);
+  const logedInUser = await requireRole(["client", "admin", "staff","owner"]);
+
+  console.log("new appitment page",logedInUser);
+
+  if(!logedInUser){
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-950">
@@ -48,7 +54,7 @@ export default async function NewAppointmentPage() {
         </div>
       </section>
 
-      <AppointmentForm />
+      <AppointmentForm clientId={logedInUser.id}/>
     </div>
   );
 }

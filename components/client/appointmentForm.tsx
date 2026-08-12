@@ -28,6 +28,7 @@ import { Label } from "@/components/ui/label";
 import { trainers } from "@/drizzle/schemas/trainer-schema";
 import { getAllTrainersAction, getTrainerByIdAction, loadTrainerScheduleByIdAndDayOfWeekAction } from "@/actions/trainer.action";
 
+
 const sessionTypes = [
   {
     title: "Strength training",
@@ -56,7 +57,8 @@ const availableSlots = [
 ];
 
 
-export default function AppointmentForm() {
+export default function AppointmentForm({ clientId }: { clientId: string }) {
+
   const [dayOfWeek, setDayOfWeek] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<string | null>(null);
   const [endTime, setEndTime] = useState<string | null>(null);
@@ -81,11 +83,6 @@ export default function AppointmentForm() {
     fetch();
   }, []);
 
-
-
-  console.log(listAllTrainers);
-  console.log(selectedTrainer);
-
   async function loadTrainer(id: string) {
     const trainer = await getTrainerByIdAction(id);
     try {
@@ -107,7 +104,16 @@ export default function AppointmentForm() {
   }
 
   async function createNewAppointment() {
-    alert(dayOfWeek);
+    const newAppointment = {
+      clientId,
+      trainerId: selectedTrainer?.id,
+      dayOfWeek,
+      startTime,
+      endTime,
+      notes
+    };
+
+    console.log(newAppointment);
   };
 
   return (
