@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { trainers } from "@/drizzle/schemas/trainer-schema";
 import { getAllTrainersAction, getTrainerByIdAction, loadTrainerScheduleByIdAndDayOfWeekAction } from "@/actions/trainer.action";
+import { createNewAppointmentAction } from "@/actions/appointment.action";
 
 
 const sessionTypes = [
@@ -104,16 +105,26 @@ export default function AppointmentForm({ clientId }: { clientId: string }) {
   }
 
   async function createNewAppointment() {
+    if (!dayOfWeek || !startTime || !endTime) {
+      setError("Please choose date and day for training!");
+      alert(error);
+      return;
+    };
+
+    const test = new Date(dayOfWeek);
+    const d = test.getDay();
+
     const newAppointment = {
       clientId,
-      trainerId: selectedTrainer?.id,
-      dayOfWeek,
+      trainerId: selectedTrainer?.id || "test",
+      dayOfWeek:d ,
       startTime,
       endTime,
       notes
     };
 
-    console.log(newAppointment);
+    console.log(newAppointment)
+    // const appointment = await createNewAppointmentAction(newAppointment);
   };
 
   return (

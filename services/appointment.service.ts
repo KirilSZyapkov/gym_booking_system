@@ -6,8 +6,8 @@ type Params = {
   clientId: string,
   trainerId: string,
   dayOfWeek: string,
-  startTime: Date,
-  endTime: Date,
+  startTime: string,
+  endTime: string,
 }
 
 export async function createNewAppointmentService(data: Params) {
